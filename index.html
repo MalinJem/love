@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для тебя</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: #4a1a2e;
+            font-family: 'Georgia', serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+            transition: background 2s ease;
+            background:
+                linear-gradient(rgba(255, 240, 245, 0.15), rgba(255, 224, 232, 0.2)),
+                url('fon1.jpg') center/cover no-repeat fixed;
+        }
+
+        h1, p, .question {
+            color: #4a1a2e;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        button {
+            background: rgba(255, 240, 245, 0.4);
+            border: 2px solid #4a1a2e;
+            color: #4a1a2e;
+            padding: 15px 50px;
+            font-size: 1.2em;
+            font-family: 'Georgia', serif;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        button:hover {
+            background: #4a1a2e;
+            color: #fff0f5;
+            box-shadow: 0 0 20px rgba(74, 26, 46, 0.6);
+            text-shadow: none;
+        }
+
+        .moon, .sun, .stars { display: none !important; }
+
+        .mountains {
+            position: fixed;
+            bottom: 0; left: 0;
+            width: 100%; height: 220px;
+            background: linear-gradient(180deg, transparent 0%, rgba(74, 26, 46, 0.4) 100%);
+            clip-path: polygon(
+                0% 100%, 0% 60%, 12% 40%, 22% 55%, 35% 25%,
+                48% 50%, 60% 30%, 72% 55%, 85% 35%, 100% 60%, 100% 100%
+            );
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        .sakura {
+            position: fixed;
+            top: -50px;
+            font-size: 20px;
+            opacity: 0.7;
+            animation: fall linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            0%   { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+            10%  { opacity: 0.7; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .screen { display: none; animation: fadeIn 1.2s ease-in; }
+        .screen.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        #screen2 h1 {
+            animation: shimmerText 8s ease-in-out infinite;
+        }
+
+        @keyframes shimmerText {
+            0%, 100% {
+                color: #4a1a2e;
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 5px rgba(255, 255, 255, 0.5);
+            }
+            25% {
+                color: #8a3a5e;
+                text-shadow: 0 0 20px rgba(200, 140, 230, 0.7), 0 0 40px rgba(180, 100, 220, 0.4);
+            }
+            50% {
+                color: #b464dc;
+                text-shadow: 0 0 25px rgba(180, 100, 220, 0.9), 0 0 50px rgba(212, 160, 255, 0.6), 0 0 80px rgba(255, 255, 255, 0.4);
+            }
+            75% {
+                color: #a85078;
+                text-shadow: 0 0 20px rgba(255, 158, 196, 0.8), 0 0 40px rgba(200, 140, 230, 0.5);
+            }
+        }
+
+        .photo {
+            margin: 0 auto 25px auto;
+            border-radius: 15px;
+            border: 2px solid #4a1a2e;
+            box-shadow: 0 0 25px rgba(74, 26, 46, 0.5);
+            overflow: hidden;
+            background: rgba(255, 240, 245, 0.3);
+            transition: box-shadow 0.5s ease;
+        }
+
+        .photo img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-1 {
+            width: 320px;
+            height: 320px;
+            max-width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            animation: swayPhoto1 10s ease-in-out infinite;
+        }
+
+        @keyframes swayPhoto1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25%      { transform: translate(-6px, -4px) rotate(-1.2deg); }
+            50%      { transform: translate(4px, -8px) rotate(0.8deg); }
+            75%      { transform: translate(6px, 2px) rotate(1.3deg); }
+        }
+
+        .photo-2 {
+            width: 200px;
+            height: 200px;
+            margin-left: auto;
+            margin-right: 10%;
+            margin-top: -40px;
+            animation: swayPhoto2 11s ease-in-out infinite;
+        }
+
+        @keyframes swayPhoto2 {
+            0%, 100% { transform: rotate(-3deg) translate(0, 0); }
+            25%      { transform: rotate(-1.5deg) translate(5px, 3px); }
+            50%      { transform: rotate(-4deg) translate(-4px, 6px); }
+            75%      { transform: rotate(-2deg) translate(-6px, -3px); }
+        }
+
+        .photo:hover {
+            box-shadow: 0 0 40px rgba(200, 140, 230, 0.8);
+        }
+
+        .buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .question { font-size: 2.2em; margin-bottom: 40px; }
+
+        .yes-link {
+            color: inherit;
+            cursor: pointer;
+            display: inline-block;
+            padding: 5px 10px;
+            transition: all 0.5s ease;
+            border-radius: 12px;
+        }
+
+        .yes-link.highlight {
+            animation: glowYes 1.5s ease-in-out infinite;
+        }
+
+        @keyframes glowYes {
+            0%, 100% {
+                color: #4a1a2e;
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            }
+            50% {
+                color: #b464dc;
+                text-shadow:
+                    0 0 10px #b464dc,
+                    0 0 25px #b464dc,
+                    0 0 50px #d4a0ff,
+                    0 0 80px rgba(180, 100, 220, 0.6);
+            }
+        }
+
+        .question-buttons {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            min-height: 60px;
+        }
+
+        .yes-btn {
+            transition: left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        background 0.3s ease,
+                        color 0.3s ease;
+        }
+
+        .yes-btn.escaped {
+            position: fixed;
+            z-index: 999;
+        }
+
+        .broken-heart {
+            position: fixed;
+            font-size: 28px;
+            pointer-events: none;
+            z-index: 10000;
+            animation: brokenHeartFly 1.6s ease-out forwards;
+        }
+
+        @keyframes brokenHeartFly {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0.3) rotate(0deg);
+            }
+            30% {
+                opacity: 1;
+                transform: translate(calc(var(--dx) * 0.4), calc(var(--dy) * 0.4 - 40px)) scale(1.3) rotate(var(--rot));
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--dx), calc(var(--dy) + 100px)) scale(0.7) rotate(calc(var(--rot) * 2));
+            }
+        }
+
+        #cosmosCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            display: none;
+            background: radial-gradient(ellipse at center, #1a0a2e 0%, #0a0510 70%, #000000 100%);
+            cursor: grab;
+        }
+        #cosmosCanvas.active { display: block; }
+        #cosmosCanvas:active { cursor: grabbing; }
+
+        .question-mark-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(255, 158, 196, 0.25);
+            border: 3px solid #ff9ec4;
+            color: #ff9ec4;
+            font-size: 2.2em;
+            font-weight: bold;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            text-shadow: 0 0 20px #ff9ec4, 0 0 40px #d4a0ff;
+            box-shadow: 0 0 30px rgba(255, 158, 196, 0.5), inset 0 0 20px rgba(255, 158, 196, 0.2);
+            animation: qMarkPulse 2s ease-in-out infinite;
+        }
+
+        .question-mark-btn.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .question-mark-btn:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 50px rgba(255, 158, 196, 0.9), 0 0 100px rgba(212, 160, 255, 0.6), inset 0 0 30px rgba(255, 158, 196, 0.4);
+            background: rgba(255, 158, 196, 0.35);
+        }
+
+        @keyframes qMarkPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 30px rgba(255, 158, 196, 0.5), inset 0 0 20px rgba(255, 158, 196, 0.2);
+            }
+            50% {
+                transform: scale(1.08);
+                box-shadow: 0 0 50px rgba(255, 158, 196, 0.9), 0 0 100px rgba(212, 160, 255, 0.6), inset 0 0 30px rgba(255, 158, 196, 0.4);
+            }
+        }
+
+        .final-heart {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 120px;
+            color: #ff9ec4;
+            cursor: pointer;
+            z-index: 100;
+            text-shadow:
+                0 0 30px #ff9ec4,
+                0 0 60px #d4a0ff,
+                0 0 100px rgba(180, 100, 220, 0.8);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            display: none;
+            animation: heartBeat 1.4s ease-in-out infinite;
+            user-select: none;
+        }
+
+        .final-heart.show {
+            display: block;
+            opacity: 1;
+            animation: heartAppear 0.8s ease-out forwards, heartBeat 1.4s ease-in-out 0.8s infinite;
+        }
+
+        @keyframes heartAppear {
+            0%   { transform: translate(-50%, -50%) scale(0) rotate(-180deg); }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50%      { transform: translate(-50%, -50%) scale(1.15); }
+        }
+
+        .final-heart:hover {
+            color: #fff;
+        }
+
+        .poll-question {
+            font-size: 1.8em;
+            margin-bottom: 35px;
+            line-height: 1.4;
+        }
+
+        .poll-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .poll-btn {
+            width: 100%;
+            max-width: 320px;
+            padding: 15px 30px;
+            font-size: 1.1em;
+        }
+
+        .date-time-form {
+            margin-top: 20px;
+            display: none;
+            flex-direction: column;
+            gap: 25px;
+            align-items: center;
+            animation: fadeIn 0.8s ease;
+        }
+        .date-time-form.show { display: flex; }
+
+        .select-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .select-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .select-label {
+            font-size: 0.95em;
+            color: #4a1a2e;
+            opacity: 0.75;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            letter-spacing: 1px;
+        }
+
+        .custom-select { position: relative; min-width: 100px; }
+
+        .custom-select-trigger {
+            background: rgba(255, 240, 245, 0.6);
+            border: 2px solid #4a1a2e;
+            color: #4a1a2e;
+            padding: 12px 20px;
+            font-size: 1em;
+            font-family: 'Georgia', serif;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            min-width: 100px;
+        }
+
+        .custom-select-trigger:hover {
+            background: rgba(255, 240, 245, 0.85);
+            box-shadow: 0 0 15px rgba(200, 140, 230, 0.4);
+        }
+
+        .custom-select-trigger::after {
+            content: '▾';
+            font-size: 0.9em;
+            opacity: 0.7;
+            transition: transform 0.3s ease;
+        }
+
+        .custom-select.open .custom-select-trigger::after { transform: rotate(180deg); }
+        .custom-select.open .custom-select-trigger {
+            background: rgba(255, 240, 245, 0.95);
+            box-shadow: 0 0 20px rgba(200, 140, 230, 0.6);
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0; right: 0;
+            background: rgba(255, 245, 250, 0.98);
+            border: 2px solid #4a1a2e;
+            border-radius: 20px;
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 50;
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(74, 26, 46, 0.3);
+        }
+
+        .custom-select.open .custom-select-options {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .custom-select-options::-webkit-scrollbar { width: 8px; }
+        .custom-select-options::-webkit-scrollbar-track {
+            background: rgba(255, 240, 245, 0.5);
+            border-radius: 10px;
+        }
+        .custom-select-options::-webkit-scrollbar-thumb {
+            background: #4a1a2e;
+            border-radius: 10px;
+        }
+
+        .custom-select-option {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            color: #4a1a2e;
+            transition: background 0.2s ease;
+            text-align: center;
+        }
+        .custom-select-option:hover { background: rgba(200, 140, 230, 0.25); }
+        .custom-select-option.selected {
+            background: rgba(200, 140, 230, 0.4);
+            font-weight: bold;
+        }
+
+        .confirm-result {
+            margin-top: 30px;
+            padding: 25px 30px;
+            border: 2px solid #4a1a2e;
+            border-radius: 25px;
+            background: rgba(255, 240, 245, 0.6);
+            display: none;
+            animation: fadeIn 1s ease;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 0 30px rgba(200, 140, 230, 0.4);
+        }
+        .confirm-result.show { display: block; }
+
+        .confirm-result p {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        .confirm-result .big {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #6a2a4a;
+            margin: 18px 0;
+            text-shadow: 0 0 20px rgba(200, 140, 230, 0.6);
+        }
+        .confirm-result .hint-text {
+            font-size: 0.95em;
+            opacity: 0.75;
+            font-style: italic;
+        }
+
+        #screen4 { display: none !important; }
+    </style>
+</head>
+<body class="screen-1">
+
+    <div class="mountains" id="mountainsBg"></div>
+
+    <canvas id="cosmosCanvas"></canvas>
+
+    <button class="question-mark-btn" id="questionMarkBtn">?</button>
+
+    <div class="final-heart" id="finalHeart">♡</div>
+
+    <div class="container">
+
+        <div class="screen active" id="screen1">
+            <div class="photo photo-1">
+                <img src="g1.jpg" alt="Наше фото 1">
+            </div>
+            <div class="photo photo-2">
+                <img src="g2.jpg" alt="Наше фото 2">
+            </div>
+            <h1>текст</h1>
+            <div class="buttons">
+                <button onclick="nextScreen(2)">Дальше →</button>
+            </div>
+        </div>
+
+        <div class="screen" id="screen2">
+            <h1>текст</h1>
+            <div class="buttons">
+                <button onclick="prevScreen(1)">← Назад</button>
+                <button onclick="nextScreen(3)">Дальше →</button>
+            </div>
+        </div>
+
+        <div class="screen" id="screen3">
+            <p class="question">
+                <span class="yes-link" id="yesLink" onclick="nextScreen(4)">Да</span> или нет?
+            </p>
+            <div class="question-buttons" id="questionButtons">
+                <button class="yes-btn" id="yesBtn" onclick="escapeYes(event, this)">Да</button>
+                <button class="no-btn" id="noBtn" onclick="brokenHearts(event, this)">Нет</button>
+            </div>
+        </div>
+
+        <div class="screen" id="screen4"></div>
+
+        <div class="screen" id="screen5">
+            <p class="poll-question">Что мы будем делать? 💫</p>
+
+            <div class="poll-options" id="pollOptions">
+                <button class="poll-btn" onclick="chooseActivity('смотреть аниме')">Смотреть аниме 🍿</button>
+                <button class="poll-btn" onclick="chooseActivity('гулять')">Гулять 🌳</button>
+                <button class="poll-btn" onclick="chooseActivity('играть в пабг')">Играть в пабг 🎮</button>
+            </div>
+
+            <div class="date-time-form" id="dateTimeForm">
+                <div class="select-row">
+                    <div class="select-box">
+                        <span class="select-label">День</span>
+                        <div class="custom-select" data-type="day">
+                            <div class="custom-select-trigger">—</div>
+                            <div class="custom-select-options"></div>
+                        </div>
+                    </div>
+                    <div class="select-box">
+                        <span class="select-label">Месяц</span>
+                        <div class="custom-select" data-type="month">
+                            <div class="custom-select-trigger">—</div>
+                            <div class="custom-select-options"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="select-row">
+                    <div class="select-box">
+                        <span class="select-label">Час</span>
+                        <div class="custom-select" data-type="hour">
+                            <div class="custom-select-trigger">—</div>
+                            <div class="custom-select-options"></div>
+                        </div>
+                    </div>
+                    <div class="select-box">
+                        <span class="select-label">Минуты</span>
+                        <div class="custom-select" data-type="minute">
+                            <div class="custom-select-trigger">—</div>
+                            <div class="custom-select-options"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="confirmChoice()">Подтвердить ✓</button>
+            </div>
+
+            <div class="confirm-result" id="confirmResult">
+                <p>Ты выбрал(а):</p>
+                <p class="big" id="resultText"></p>
+                <p class="hint-text">Сделай скриншот и отправь мне 😉</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="three.min.js"></script>
+
+    <script>
+        const yesLink = document.getElementById('yesLink');
+        const cosmosCanvas = document.getElementById('cosmosCanvas');
+        const finalHeart = document.getElementById('finalHeart');
+        const questionMarkBtn = document.getElementById('questionMarkBtn');
+
+        let yesClickCount = 0;
+        let chosenActivity = '';
+        let nameBtnClicked = false;
+        let questionMarkTimer = null;
+
+        const selections = { day: '', month: '', hour: '', minute: '' };
+
+        const months = [
+            'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+            'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+        ];
+
+        const helloWords = [
+            'Привет', 'Hello', 'Hallo', 'Bonjour', 'Ciao', 'Olá', 'Hola',
+            'Привіт', 'Прывітанне', 'Salut', 'Cześć', 'Ahoj', 'Zdravo',
+            'Здравей', 'Γειά σου', 'Hej', 'Hei', 'Tere', 'Sveiki', 'Labas',
+            'Moi', 'Szia', 'Buna', 'Përshëndetje', 'Здраво', 'Živjo',
+            'Halló', 'Dia dhuit', 'Salut', 'Ola', 'Kaixo', 'Hoi', 'Moien',
+            'Halo', 'Salve', 'Χαίρε', 'Salam', 'Merhaba', 'Ahoj', 'Cześć',
+            'Barev', 'Gamarjoba', 'Салам', 'Марха', 'Ассаламу',
+            'Сәлам', 'Хәерле', 'Здоровенькі', 'Приветик', 'Здрасти',
+            'Dobrý den', 'Dobro jutro', 'Dzień dobry', 'Jó napot',
+            'Bongu', 'Bonġu', 'Saluton', 'Hej då', 'Tervist', 'Sveika',
+            'Dag', 'Goedendag', 'Goeie', 'Hallo daar', 'Grüezi', 'Servus',
+            'Moin', 'Hoi hoi', 'Ahoi', 'Cześć', 'Witaj', 'Hei hei',
+            'こんにちは', '你好', '안녕하세요', 'नमस्ते', 'নমস্কার',
+            'ਸਤ ਸ੍ਰੀ ਅਕਾਲ', 'નમસ્તે', 'வணக்கம்', 'నమస్కారం',
+            'ನಮಸ್ಕಾರ', 'നമസ്കാരം', 'ආයුබෝවන්', 'Xin chào', 'สวัสดี',
+            'ສະບາຍດີ', 'ជំរាបសួរ', 'မင်္ဂလာပါ', 'Selamat', 'Helo',
+            'Kumusta', 'Habari', 'こんにちわ', '你好嗎', '여보세요',
+            '你好啊', 'こんばんは', 'おはよう', '안녕', '반가워',
+            'Chào bạn', 'สวัสดีครับ', 'ສະບາຍດີເຈົ້າ', 'សួស្តី', 'မင်္ဂလာပါခင်ဗျာ',
+            'Halo semuanya', 'Apa khabar', 'Kumusta ka', 'Habari yako',
+            'お元気ですか', 'はじめまして', 'よろしく', 'ありがとう',
+            '谢谢', '再见', '早上好', '晚上好', '晚安',
+            '감사합니다', '반갑습니다', '잘 지내요', '안녕히 가세요',
+            'धन्यवाद', 'शुभ प्रभात', 'शुभ संध्या', 'शुभ रात्रि',
+            'ধন্যবাদ', 'শুভ সকাল', 'শুভ সন্ধ্যা', 'শুভ রাত্রি',
+            'שלום', 'مرحبا', 'سلام', 'ܫܠܡܐ', 'ሰላም', 'Selam', 'Merhaba',
+            'Салам', 'Саламатсызбы', 'Салом', 'Ассалом', 'Салам алейкум',
+            'Merhabalar', 'Merhaba canım', 'أهلا', 'أهلاً وسهلاً',
+            'שלום עליכם', 'בוקר טוב', 'ערב טוב', 'לילה טוב',
+            'صباح الخير', 'مساء الخير', 'تصبح على خير', 'شكرا',
+            'سپاس', 'درود', 'خوش آمدید', 'صبح بخیر', 'شب بخیر',
+            'Sawubona', 'Dumela', 'Mhoro', 'Salama', 'Jambo', 'Karibu',
+            'Sannu', 'Ẹ n lẹ', 'Akwaaba', 'Muraho', 'Mbote', 'Bonjou',
+            'Salut', 'Salamu', 'Tungamira', 'Twatotela', 'Oli otya',
+            'Aloha', 'Kia ora', 'Talofa', 'Mālō', 'Bula', 'Ia ora na',
+            'Bonjou', 'Halo', 'Hey', 'Hi', 'Howdy', 'Yo',
+            'Sup', 'What\'s up', 'Hey there', 'Hiya', 'Saluton',
+            'G\'day', 'G\'day mate', 'Kia ora koutou', 'Talofa lava',
+            'Mālō e lelei', 'Bula vinaka', 'Maururu', 'Ia orana',
+            'Anyoung', 'Nihao', 'Konnichiwa', 'Sawaddee', 'Xin chao',
+            'Mingalaba', 'Sabaidee', 'Chum reap suor', 'Mabuhay',
+            'Soo dhawoow', 'Baga nagaan', 'Akkam', 'Tena yol',
+            'Здравствуйте', 'Добрый день', 'Доброе утро', 'Добрый вечер',
+            'Приветствую', 'Салам', 'Мир вам', 'Хәерле иртә',
+            'Bienvenue', 'Willkommen', 'Bienvenido', 'Benvenuto',
+            'Bem-vindo', 'Velkommen', 'Välkommen', 'Welkom'
+        ];
+
+        let threeScene, camera, renderer, wordGroup, starField, animationId;
+        let twinkleStars = [];
+        let targetRotX = 0, targetRotY = 0;
+        let autoRotate = true;
+        let isDragging = false;
+        let lastX = 0, lastY = 0;
+        let cameraDistance = 400;
+
+        // Начальные значения для возврата камеры
+        const INITIAL_CAMERA_DISTANCE = 400;
+        const INITIAL_ROT_X = 0;
+
+        let exploding = false;
+        let explosionStartTime = 0;
+        let exploded = false;
+
+        let nameSprite = null;
+
+        // ===== Вспышка "имени" при взрыве =====
+        let nameFlashSprite = null;
+        let nameFlashStartTime = 0;
+        let nameFlashing = false;
+
+        function initCosmos() {
+            if (threeScene) {
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                return;
+            }
+
+            threeScene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(
+                70,
+                window.innerWidth / window.innerHeight,
+                1,
+                5000
+            );
+            camera.position.z = cameraDistance;
+
+            renderer = new THREE.WebGLRenderer({
+                canvas: cosmosCanvas,
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setClearColor(0x000000, 0);
+
+            wordGroup = new THREE.Group();
+            threeScene.add(wordGroup);
+
+            createHeartOfWords();
+            createNameSprite();
+            createStars();
+            createTwinkleStars();
+            setupControls();
+            animateCosmos();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        function createNameSprite() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const fontSize = 64;
+            ctx.font = 'bold ' + fontSize + 'px Georgia, serif';
+
+            const text = 'имя';
+            const metrics = ctx.measureText(text);
+            const textWidth = metrics.width;
+
+            canvas.width = textWidth + 40;
+            canvas.height = fontSize + 40;
+
+            const ctx2 = canvas.getContext('2d');
+            ctx2.font = 'bold ' + fontSize + 'px Georgia, serif';
+            ctx2.textAlign = 'center';
+            ctx2.textBaseline = 'middle';
+
+            const color = '#ffe0ec';
+            ctx2.shadowColor = '#ff9ec4';
+            ctx2.shadowBlur = 45;
+            ctx2.fillStyle = color;
+            ctx2.fillText(text, canvas.width / 2, canvas.height / 2);
+            ctx2.shadowBlur = 25;
+            ctx2.fillText(text, canvas.width / 2, canvas.height / 2);
+            ctx2.shadowBlur = 0;
+            ctx2.fillText(text, canvas.width / 2, canvas.height / 2);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.minFilter = THREE.LinearFilter;
+
+            const material = new THREE.SpriteMaterial({
+                map: texture,
+                transparent: true,
+                depthTest: false,
+                depthWrite: false,
+                opacity: 0.95
+            });
+
+            nameSprite = new THREE.Sprite(material);
+
+            const size = 30;
+            const scale = size / 10;
+            nameSprite.scale.set(
+                (canvas.width / canvas.height) * scale,
+                scale,
+                1
+            );
+
+            nameSprite.position.set(0, 0, 0);
+
+            nameSprite.userData = {
+                isName: true,
+                baseScaleX: (canvas.width / canvas.height) * scale,
+                baseScaleY: scale
+            };
+
+            wordGroup.add(nameSprite);
+        }
+
+        // ===== СОЗДАЁМ СПРАЙТ-ВСПЫШКУ для "имени" =====
+        function createNameFlash() {
+            if (nameFlashSprite) return;
+
+            const canvas = document.createElement('canvas');
+            const size = 512;
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // Яркое радиальное свечение — белое ядро + розовое гало
+            const gradient = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            gradient.addColorStop(0.1, 'rgba(255, 240, 250, 0.95)');
+            gradient.addColorStop(0.3, 'rgba(255, 200, 230, 0.6)');
+            gradient.addColorStop(0.6, 'rgba(255, 158, 196, 0.25)');
+            gradient.addColorStop(1, 'rgba(212, 160, 255, 0)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+
+            // Лучики-звёздочка
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.lineWidth = 3;
+            for (let i = 0; i < 8; i++) {
+                const angle = (Math.PI * 2 * i) / 8;
+                ctx.beginPath();
+                ctx.moveTo(size/2, size/2);
+                ctx.lineTo(
+                    size/2 + Math.cos(angle) * 200,
+                    size/2 + Math.sin(angle) * 200
+                );
+                ctx.stroke();
+            }
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.minFilter = THREE.LinearFilter;
+
+            const material = new THREE.SpriteMaterial({
+                map: texture,
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                depthTest: false,
+                depthWrite: false,
+                opacity: 0
+            });
+
+            nameFlashSprite = new THREE.Sprite(material);
+            nameFlashSprite.position.set(0, 0, 0);
+            nameFlashSprite.scale.set(30, 30, 1);
+
+            wordGroup.add(nameFlashSprite);
+        }
+
+        function createHeartOfWords() {
+            const colors = [0xff9ec4, 0xffd4e5, 0xe06090, 0xffb8d4, 0xffffff, 0xd4a0ff];
+            const count = 400;
+
+            for (let i = 0; i < count; i++) {
+                const word = helloWords[Math.floor(Math.random() * helloWords.length)];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const size = 14 + Math.random() * 20;
+
+                const sprite = makeTextSprite(word, color, size);
+
+                const t = Math.random() * Math.PI * 2;
+                const r = Math.pow(Math.random(), 0.7);
+
+                const hx = 16 * Math.pow(Math.sin(t), 3);
+                const hy = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+
+                const scale = 7 + Math.random() * 3;
+                const x = hx * scale * r;
+                const y = hy * scale * r;
+                const z = (Math.random() - 0.5) * 60 * (1 - r * 0.5);
+
+                sprite.position.set(x, y, z);
+
+                sprite.userData = {
+                    basePos: sprite.position.clone(),
+                    speed: 0.3 + Math.random() * 0.7,
+                    offset: Math.random() * Math.PI * 2,
+                    explodeDir: new THREE.Vector3(x, y, z).normalize()
+                };
+
+                wordGroup.add(sprite);
+            }
+        }
+
+        function makeTextSprite(text, color, size) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const fontSize = 64;
+            ctx.font = 'bold ' + fontSize + 'px Georgia, serif';
+
+            const metrics = ctx.measureText(text);
+            const textWidth = metrics.width;
+
+            canvas.width = textWidth + 40;
+            canvas.height = fontSize + 40;
+
+            const ctx2 = canvas.getContext('2d');
+            ctx2.font = 'bold ' + fontSize + 'px Georgia, serif';
+            ctx2.textAlign = 'center';
+            ctx2.textBaseline = 'middle';
+
+            ctx2.shadowColor = '#' + color.toString(16).padStart(6, '0');
+            ctx2.shadowBlur = 20;
+            ctx2.fillStyle = '#' + color.toString(16).padStart(6, '0');
+            ctx2.fillText(text, canvas.width / 2, canvas.height / 2);
+            ctx2.shadowBlur = 0;
+            ctx2.fillText(text, canvas.width / 2, canvas.height / 2);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.minFilter = THREE.LinearFilter;
+
+            const material = new THREE.SpriteMaterial({
+                map: texture,
+                transparent: true,
+                depthTest: false,
+                depthWrite: false,
+                opacity: 0.9
+            });
+
+            const sprite = new THREE.Sprite(material);
+            const scale = size / 10;
+            sprite.scale.set(
+                (canvas.width / canvas.height) * scale,
+                scale,
+                1
+            );
+
+            return sprite;
+        }
+
+        function createStars() {
+            const starGeometry = new THREE.BufferGeometry();
+            const starCount = 800;
+            const positions = new Float32Array(starCount * 3);
+
+            for (let i = 0; i < starCount * 3; i += 3) {
+                positions[i]     = (Math.random() - 0.5) * 4000;
+                positions[i + 1] = (Math.random() - 0.5) * 4000;
+                positions[i + 2] = (Math.random() - 0.5) * 4000;
+            }
+
+            starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const starMaterial = new THREE.PointsMaterial({
+                color: 0xffd4e5,
+                size: 1.8,
+                transparent: true,
+                opacity: 0.7,
+                sizeAttenuation: true
+            });
+
+            starField = new THREE.Points(starGeometry, starMaterial);
+            threeScene.add(starField);
+        }
+
+        function createTwinkleStars() {
+            for (let i = 0; i < 100; i++) {
+                const starGeo = new THREE.SphereGeometry(1.2, 4, 4);
+                const starMat = new THREE.MeshBasicMaterial({
+                    color: 0xffffff,
+                    transparent: true,
+                    opacity: 0.3 + Math.random() * 0.6
+                });
+                const star = new THREE.Mesh(starGeo, starMat);
+                star.position.set(
+                    (Math.random() - 0.5) * 3000,
+                    (Math.random() - 0.5) * 2500,
+                    (Math.random() - 0.5) * 3000
+                );
+                star.userData = {
+                    baseOpacity: 0.3 + Math.random() * 0.6,
+                    speed: 0.5 + Math.random() * 2,
+                    offset: Math.random() * Math.PI * 2
+                };
+                threeScene.add(star);
+                twinkleStars.push(star);
+            }
+        }
+
+        function setupControls() {
+            const el = cosmosCanvas;
+            let mouseDownX = 0, mouseDownY = 0;
+
+            el.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                lastX = e.clientX;
+                lastY = e.clientY;
+                mouseDownX = e.clientX;
+                mouseDownY = e.clientY;
+                autoRotate = false;
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - lastX;
+                const dy = e.clientY - lastY;
+                lastX = e.clientX;
+                lastY = e.clientY;
+                targetRotY += dx * 0.005;
+                targetRotX += dy * 0.005;
+            });
+
+            window.addEventListener('mouseup', (e) => {
+                const movedX = Math.abs(e.clientX - mouseDownX);
+                const movedY = Math.abs(e.clientY - mouseDownY);
+
+                if (movedX < 5 && movedY < 5 && nameSprite && !exploded && !nameBtnClicked) {
+                    const vector = new THREE.Vector3();
+                    nameSprite.getWorldPosition(vector);
+                    vector.project(camera);
+
+                    const screenX = (vector.x * 0.5 + 0.5) * window.innerWidth;
+                    const screenY = (-vector.y * 0.5 + 0.5) * window.innerHeight;
+
+                    const dist = camera.position.z - nameSprite.position.z;
+                    const screenSize = (nameSprite.scale.x / dist) * window.innerHeight * 0.5;
+                    const clickRadius = Math.max(35, screenSize * 0.6);
+
+                    const dx = e.clientX - screenX;
+                    const dy = e.clientY - screenY;
+                    const distToName = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distToName < clickRadius) {
+                        triggerExplosion();
+                    }
+                }
+
+                isDragging = false;
+                setTimeout(() => {
+                    if (!isDragging) autoRotate = true;
+                }, 3000);
+            });
+
+            el.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                cameraDistance += e.deltaY * 0.5;
+                cameraDistance = Math.max(30, Math.min(1500, cameraDistance));
+            }, { passive: false });
+
+            let touchStartDist = 0;
+            let touchLastX = 0, touchLastY = 0;
+            let touchStartX = 0, touchStartY = 0;
+
+            el.addEventListener('touchstart', (e) => {
+                autoRotate = false;
+                if (e.touches.length === 1) {
+                    touchLastX = e.touches[0].clientX;
+                    touchLastY = e.touches[0].clientY;
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                } else if (e.touches.length === 2) {
+                    const dx = e.touches[0].clientX - e.touches[1].clientX;
+                    const dy = e.touches[0].clientY - e.touches[1].clientY;
+                    touchStartDist = Math.sqrt(dx * dx + dy * dy);
+                }
+            }, { passive: true });
+
+            el.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (e.touches.length === 1) {
+                    const dx = e.touches[0].clientX - touchLastX;
+                    const dy = e.touches[0].clientY - touchLastY;
+                    touchLastX = e.touches[0].clientX;
+                    touchLastY = e.touches[0].clientY;
+                    targetRotY += dx * 0.008;
+                    targetRotX += dy * 0.008;
+                } else if (e.touches.length === 2) {
+                    const dx = e.touches[0].clientX - e.touches[1].clientX;
+                    const dy = e.touches[0].clientY - e.touches[1].clientY;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const delta = touchStartDist - dist;
+                    cameraDistance += delta * 1.5;
+                    cameraDistance = Math.max(30, Math.min(1500, cameraDistance));
+                    touchStartDist = dist;
+                }
+            }, { passive: false });
+
+            el.addEventListener('touchend', (e) => {
+                if (e.changedTouches.length === 1) {
+                    const t = e.changedTouches[0];
+                    const movedX = Math.abs(t.clientX - touchStartX);
+                    const movedY = Math.abs(t.clientY - touchStartY);
+
+                    if (movedX < 10 && movedY < 10 && nameSprite && !exploded && !nameBtnClicked) {
+                        const vector = new THREE.Vector3();
+                        nameSprite.getWorldPosition(vector);
+                        vector.project(camera);
+
+                        const screenX = (vector.x * 0.5 + 0.5) * window.innerWidth;
+                        const screenY = (-vector.y * 0.5 + 0.5) * window.innerHeight;
+
+                        const dist = camera.position.z - nameSprite.position.z;
+                        const screenSize = (nameSprite.scale.x / dist) * window.innerHeight * 0.5;
+                        const clickRadius = Math.max(35, screenSize * 0.6);
+
+                        const dx = t.clientX - screenX;
+                        const dy = t.clientY - screenY;
+                        const distToName = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distToName < clickRadius) {
+                            triggerExplosion();
+                        }
+                    }
+                }
+
+                setTimeout(() => {
+                    if (!isDragging) autoRotate = true;
+                }, 3000);
+            });
+        }
+
+        function triggerExplosion() {
+            nameBtnClicked = true;
+            exploding = true;
+            explosionStartTime = Date.now();
+            exploded = true;
+
+            if (questionMarkTimer) {
+                clearTimeout(questionMarkTimer);
+                questionMarkTimer = null;
+            }
+            questionMarkBtn.classList.remove('show');
+
+            // ===== ВОЗВРАТ КАМЕРЫ В ПЕРВОНАЧАЛЬНЫЙ ВИД =====
+            // Плавно меняем cameraDistance и targetRotX — они анимируются в animateCosmos
+            cameraDistance = INITIAL_CAMERA_DISTANCE;
+            targetRotX = INITIAL_ROT_X;
+
+            // Создаём спрайт-вспышку для "имени"
+            createNameFlash();
+
+            setTimeout(() => {
+                finalHeart.classList.add('show');
+            }, 7200);
+        }
+
+        function animateCosmos() {
+            animationId = requestAnimationFrame(animateCosmos);
+
+            if (exploding) {
+                const elapsed = (Date.now() - explosionStartTime) / 1000;
+
+                // ===== ПЛАВНЫЙ ВОЗВРАТ КАМЕРЫ =====
+                // Камера плавно отъезжает на начальную дистанцию
+                camera.position.z += (INITIAL_CAMERA_DISTANCE - camera.position.z) * 0.06;
+
+                // ===== ФАЗА 1: 0–2 сек — ускоряющееся вращение =====
+                if (elapsed < 2) {
+                    const spinSpeed = 0.02 + (elapsed / 2) * 0.13;
+                    wordGroup.rotation.y += spinSpeed;
+                    targetRotY += 0.0015;
+                    wordGroup.rotation.x += (targetRotX - wordGroup.rotation.x) * 0.06;
+                }
+                // ===== ФАЗА 2: 2–4 сек — быстрое вращение =====
+                else if (elapsed < 4) {
+                    wordGroup.rotation.y += 0.18;
+                    wordGroup.rotation.x += 0.05 * Math.sin(elapsed * 8);
+                }
+                // ===== ФАЗА 3: 4–7 сек — РАЗЛЁТ =====
+                else if (elapsed < 7) {
+                    const speed = 5;
+                    wordGroup.children.forEach((sprite) => {
+                        // "имя" взрывается как звёздочка в самом начале разлёта
+                        if (sprite.userData && sprite.userData.isName) {
+                            if (!nameFlashing) {
+                                nameFlashing = true;
+                                nameFlashStartTime = Date.now();
+
+                                if (nameFlashSprite) {
+                                    nameFlashSprite.material.opacity = 1;
+                                }
+                            }
+                            // Прячем "имя"
+                            sprite.material.opacity = 0;
+                            return;
+                        }
+
+                        if (sprite.userData && sprite.userData.explodeDir) {
+                            const dir = sprite.userData.explodeDir;
+                            sprite.position.x += dir.x * speed;
+                            sprite.position.y += dir.y * speed;
+                            sprite.position.z += dir.z * speed;
+                        }
+                    });
+                    const fadeProgress = (elapsed - 4) / 3;
+                    wordGroup.children.forEach((sprite) => {
+                        if (sprite.userData && sprite.userData.isName) return;
+                        sprite.material.opacity = Math.max(0, 0.9 - fadeProgress * 0.9);
+                    });
+                }
+                // ===== КОНЕЦ =====
+                else {
+                    wordGroup.children.forEach((sprite) => {
+                        if (sprite.userData && sprite.userData.isName) return;
+                        sprite.material.opacity = 0;
+                    });
+                }
+
+                // ===== АНИМАЦИЯ ВСПЫШКИ "ИМЕНИ" =====
+                if (nameFlashing && nameFlashSprite) {
+                    const flashElapsed = (Date.now() - nameFlashStartTime) / 1000;
+                    if (flashElapsed < 1.5) {
+                        // Резко расширяется + плавно исчезает
+                        const progress = flashElapsed / 1.5;
+                        const scale = 30 + progress * 200; // от 30 до 230
+                        nameFlashSprite.scale.set(scale, scale, 1);
+                        nameFlashSprite.material.opacity = Math.max(0, 1 - progress);
+                    } else {
+                        nameFlashSprite.material.opacity = 0;
+                    }
+                }
+            } else {
+                if (autoRotate) {
+                    targetRotY += 0.0015;
+                }
+
+                wordGroup.rotation.y += (targetRotY - wordGroup.rotation.y) * 0.06;
+                wordGroup.rotation.x += (targetRotX - wordGroup.rotation.x) * 0.06;
+
+                camera.position.z += (cameraDistance - camera.position.z) * 0.06;
+
+                const t = Date.now() * 0.001;
+
+                wordGroup.children.forEach((sprite) => {
+                    if (sprite.userData && sprite.userData.isName) {
+                        const pulse = 0.85 + 0.15 * Math.sin(t * 1.5);
+                        sprite.material.opacity = pulse;
+                        const breathe = 1 + 0.03 * Math.sin(t * 1.2);
+                        sprite.scale.set(
+                            sprite.userData.baseScaleX * breathe,
+                            sprite.userData.baseScaleY * breathe,
+                            1
+                        );
+                        return;
+                    }
+
+                    if (sprite.userData && sprite.userData.basePos) {
+                        const { basePos, speed, offset } = sprite.userData;
+                        sprite.position.x = basePos.x + Math.sin(t * speed + offset) * 4;
+                        sprite.position.y = basePos.y + Math.cos(t * speed + offset) * 4;
+                        sprite.position.z = basePos.z + Math.sin(t * speed * 0.7 + offset) * 4;
+                    }
+                });
+            }
+
+            twinkleStars.forEach((star) => {
+                const { baseOpacity, speed, offset } = star.userData;
+                star.material.opacity = baseOpacity * (0.4 + 0.6 * Math.sin(Date.now() * 0.001 * speed + offset));
+            });
+
+            if (starField) {
+                starField.rotation.y += 0.0002;
+                starField.rotation.x += 0.0001;
+            }
+
+            renderer.render(threeScene, camera);
+        }
+
+        questionMarkBtn.addEventListener('click', () => {
+            nextScreen(5);
+        });
+
+        finalHeart.addEventListener('click', () => {
+            nextScreen(5);
+        });
+
+        function updateBackground(num) {
+            document.body.classList.remove('screen-1', 'screen-2', 'screen-3', 'screen-4', 'screen-5');
+            document.body.classList.add('screen-' + num);
+
+            const mountainsBg = document.getElementById('mountainsBg');
+
+            if (questionMarkTimer) {
+                clearTimeout(questionMarkTimer);
+                questionMarkTimer = null;
+            }
+            questionMarkBtn.classList.remove('show');
+
+            if (num === 4) {
+                cosmosCanvas.classList.add('active');
+                mountainsBg.style.display = 'none';
+                document.body.style.background = 'none';
+                document.body.style.backgroundImage = 'none';
+
+                setTimeout(() => {
+                    initCosmos();
+
+                    questionMarkTimer = setTimeout(() => {
+                        if (!nameBtnClicked && document.getElementById('screen4').classList.contains('active')) {
+                            questionMarkBtn.classList.add('show');
+                        }
+                    }, 40000);
+                }, 50);
+            } else {
+                cosmosCanvas.classList.remove('active');
+                mountainsBg.style.display = 'block';
+                document.body.style.background =
+                    "linear-gradient(rgba(255, 240, 245, 0.15), rgba(255, 224, 232, 0.2)), url('fon1.jpg') center/cover no-repeat fixed";
+
+                finalHeart.classList.remove('show');
+            }
+        }
+
+        function showScreen(num) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen' + num).classList.add('active');
+            updateBackground(num);
+
+            const yesBtn = document.getElementById('yesBtn');
+            if (yesBtn) {
+                yesBtn.classList.remove('escaped');
+                yesBtn.style.top = '';
+                yesBtn.style.left = '';
+                yesBtn.style.position = '';
+                yesBtn.style.margin = '';
+            }
+
+            if (num !== 3) {
+                yesLink.classList.remove('highlight');
+                yesClickCount = 0;
+            }
+        }
+
+        function nextScreen(num) { showScreen(num); }
+        function prevScreen(num) { showScreen(num); }
+
+        function brokenHearts(event, btn) {
+            const rect = btn.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 6; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'broken-heart';
+                heart.textContent = '💔';
+                heart.style.left = centerX + 'px';
+                heart.style.top = centerY + 'px';
+
+                const angle = (Math.PI * 2 * i) / 6 + (Math.random() - 0.5) * 0.6;
+                const distance = 100 + Math.random() * 120;
+                const dx = Math.cos(angle) * distance;
+                const dy = Math.sin(angle) * distance - 50;
+
+                heart.style.setProperty('--dx', dx + 'px');
+                heart.style.setProperty('--dy', dy + 'px');
+                heart.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+                heart.style.fontSize = (20 + Math.random() * 20) + 'px';
+                heart.style.animationDelay = (Math.random() * 0.15) + 's';
+
+                document.body.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 2000);
+            }
+        }
+
+        function escapeYes(event, btn) {
+            if (event) event.stopPropagation();
+
+            const padding = 60;
+            const maxX = window.innerWidth - btn.offsetWidth - padding;
+            const maxY = window.innerHeight - btn.offsetHeight - padding;
+            const x = Math.max(padding, Math.random() * maxX);
+            const y = Math.max(padding, Math.random() * maxY);
+
+            if (!btn.classList.contains('escaped')) {
+                const rect = btn.getBoundingClientRect();
+                btn.style.position = 'fixed';
+                btn.style.left = rect.left + 'px';
+                btn.style.top = rect.top + 'px';
+                btn.style.margin = '0';
+                void btn.offsetWidth;
+                btn.classList.add('escaped');
+            }
+
+            requestAnimationFrame(() => {
+                btn.style.left = x + 'px';
+                btn.style.top = y + 'px';
+            });
+
+            yesClickCount++;
+            if (yesClickCount >= 4) {
+                yesLink.classList.add('highlight');
+            }
+        }
+
+        function chooseActivity(activity) {
+            chosenActivity = activity;
+            document.getElementById('pollOptions').style.display = 'none';
+            document.getElementById('dateTimeForm').classList.add('show');
+        }
+
+        function buildOptions(type) {
+            const opts = [];
+            if (type === 'day') {
+                for (let i = 1; i <= 31; i++) opts.push(String(i));
+            } else if (type === 'month') {
+                months.forEach((m, i) => opts.push({ value: i, label: m.charAt(0).toUpperCase() + m.slice(1) }));
+            } else if (type === 'hour') {
+                for (let i = 0; i <= 23; i++) opts.push(String(i).padStart(2, '0'));
+            } else if (type === 'minute') {
+                for (let i = 0; i <= 55; i += 5) opts.push(String(i).padStart(2, '0'));
+            }
+            return opts;
+        }
+
+        function initCustomSelects() {
+            document.querySelectorAll('.custom-select').forEach(sel => {
+                const type = sel.dataset.type;
+                const trigger = sel.querySelector('.custom-select-trigger');
+                const optionsBox = sel.querySelector('.custom-select-options');
+                const opts = buildOptions(type);
+
+                optionsBox.innerHTML = '';
+                opts.forEach(opt => {
+                    const div = document.createElement('div');
+                    div.className = 'custom-select-option';
+                    if (typeof opt === 'object') {
+                        div.textContent = opt.label;
+                        div.dataset.value = opt.value;
+                    } else {
+                        div.textContent = opt;
+                        div.dataset.value = opt;
+                    }
+                    div.onclick = (e) => {
+                        e.stopPropagation();
+                        const val = div.dataset.value;
+                        const label = div.textContent;
+                        trigger.textContent = label;
+                        selections[type] = val;
+                        optionsBox.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+                        div.classList.add('selected');
+                        sel.classList.remove('open');
+                    };
+                    optionsBox.appendChild(div);
+                });
+
+                trigger.onclick = (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll('.custom-select').forEach(s => {
+                        if (s !== sel) s.classList.remove('open');
+                    });
+                    sel.classList.toggle('open');
+                };
+            });
+
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('open'));
+            });
+        }
+
+        function confirmChoice() {
+            if (!selections.day || !selections.month || !selections.hour || !selections.minute) {
+                alert('Пожалуйста, выбери день, месяц, час и минуты 💜');
+                return;
+            }
+
+            const day = selections.day;
+            const monthName = months[parseInt(selections.month)];
+            const hour = selections.hour;
+            const minute = selections.minute;
+
+            document.getElementById('dateTimeForm').classList.remove('show');
+            document.getElementById('resultText').textContent =
+                chosenActivity + ', ' + day + ' ' + monthName + ' в ' + hour + ':' + minute;
+            document.getElementById('confirmResult').classList.add('show');
+        }
+
+        initCustomSelects();
+
+        const sakuraEmojis = ['🌸', '🌸', '🌸', '🌺', '🌸', '🌸'];
+        for (let i = 0; i < 25; i++) {
+            const petal = document.createElement('div');
+            petal.className = 'sakura';
+            petal.textContent = sakuraEmojis[Math.floor(Math.random() * sakuraEmojis.length)];
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            petal.style.animationDelay = Math.random() * 5 + 's';
+            petal.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            document.body.appendChild(petal);
+        }
+    </script>
+
+</body>
+</html>
