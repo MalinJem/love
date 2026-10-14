@@ -94,7 +94,250 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        #screen2 h1 {
+        /* ============================================================
+           ЭКРАН 0 — КОНВЕРТ
+           ============================================================ */
+        #screen0 {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        #screen0.active {
+            display: flex;
+            animation: none;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 340px;
+            height: 230px;
+            cursor: pointer;
+            perspective: 1400px;
+            animation: envelopeFloat 4s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+
+        @keyframes envelopeFloat {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-10px); }
+        }
+
+        .envelope-wrapper:hover .envelope {
+            filter: brightness(1.05);
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: filter 0.4s ease;
+            filter: drop-shadow(0 15px 30px rgba(74, 26, 46, 0.5))
+                    drop-shadow(0 0 40px rgba(255, 158, 196, 0.4));
+        }
+
+        /* ===== ЗАДНЯЯ ЧАСТЬ КОНВЕРТА (нижняя база) ===== */
+        .envelope-back {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, #fff0f5 0%, #ffe0e8 100%);
+            border: 2px solid #b07888;
+            border-radius: 6px;
+            z-index: 1;
+        }
+
+        /* ===== БУМАЖКА ВНУТРИ ===== */
+        .envelope-paper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -30%) scale(0.7);
+            width: 280px;
+            height: 190px;
+            background: linear-gradient(180deg, #ffffff 0%, #fff5f9 100%);
+            border: 1px solid #d4a0b8;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(74, 26, 46, 0.2);
+            z-index: 2;
+            opacity: 0;
+            transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        opacity 0.6s ease,
+                        top 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            font-size: 1em;
+            line-height: 1.5;
+            color: #4a1a2e;
+        }
+
+        .envelope-paper::before {
+            content: '💜';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.4em;
+            opacity: 0.7;
+        }
+
+        .envelope-paper-text {
+            padding-top: 20px;
+            font-style: italic;
+            animation: shimmerText 4s ease-in-out infinite;
+        }
+
+        /* ===== КАРМАН (нижняя часть, 3 треугольника) ===== */
+        .envelope-pocket {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        /* Левый боковой треугольник */
+        .envelope-pocket::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #ffb8d4 0%, #ff9ec4 100%);
+            clip-path: polygon(0 0, 50% 55%, 0 100%);
+            border-radius: 6px 0 0 6px;
+            border: 2px solid #b07888;
+            border-right: none;
+        }
+
+        /* Правый боковой треугольник */
+        .envelope-pocket::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(-135deg, #ffb8d4 0%, #ff9ec4 100%);
+            clip-path: polygon(100% 0, 50% 55%, 100% 100%);
+            border-radius: 0 6px 6px 0;
+            border: 2px solid #b07888;
+            border-left: none;
+        }
+
+        /* Нижний треугольник */
+        .envelope-bottom {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, #ffc4dc 0%, #ffb8d4 100%);
+            clip-path: polygon(0 100%, 50% 45%, 100% 100%);
+            border-radius: 0 0 6px 6px;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        /* Тень на бумажке от кармана (для реалистичности) */
+        .envelope-bottom::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(74, 26, 46, 0.15) 0%, transparent 50%);
+            clip-path: polygon(0 100%, 50% 45%, 100% 100%);
+        }
+
+        /* ===== ВЕРХНИЙ КЛАПАН (треугольник) ===== */
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 55%;
+            background: linear-gradient(180deg, #ffd4e5 0%, #ffb8d4 100%);
+            border: 2px solid #b07888;
+            border-radius: 6px 6px 0 0;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top center;
+            transform: rotateX(0deg);
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 5;
+            backface-visibility: visible;
+            box-shadow: 0 4px 8px rgba(74, 26, 46, 0.15);
+        }
+
+        .envelope-flap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 60%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+
+        /* Сердечко-печать на клапане */
+        .envelope-heart {
+            position: absolute;
+            top: 38%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            width: 42px;
+            height: 42px;
+            background: radial-gradient(circle at 35% 35%, #c04070 0%, #8a1a3e 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.3em;
+            box-shadow:
+                0 2px 6px rgba(74, 26, 46, 0.4),
+                inset 0 -2px 6px rgba(0, 0, 0, 0.3),
+                inset 0 2px 6px rgba(255, 255, 255, 0.2);
+            z-index: 6;
+            transition: opacity 0.4s ease, transform 0.6s ease;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== СОСТОЯНИЕ ОТКРЫТИЯ ===== */
+        .envelope-wrapper.opening .envelope-flap {
+            transform: rotateX(-180deg);
+            z-index: 0;
+        }
+
+        .envelope-wrapper.opening .envelope-heart {
+            opacity: 0;
+            transform: translate(-50%, -50%) rotate(-15deg) scale(0.5);
+        }
+
+        .envelope-wrapper.opening .envelope-paper {
+            opacity: 1;
+            top: 15%;
+            transform: translate(-50%, -60%) scale(1);
+        }
+
+        /* Подпись под конвертом */
+        .envelope-hint {
+            position: absolute;
+            bottom: -55px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.05em;
+            color: #4a1a2e;
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 4px rgba(255, 255, 255, 0.7);
+            opacity: 0.85;
+            animation: hintPulse 2s ease-in-out infinite;
+            white-space: nowrap;
+            font-style: italic;
+        }
+
+        @keyframes hintPulse {
+            0%, 100% { opacity: 0.6; transform: translateX(-50%) translateY(0); }
+            50%      { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+        }
+
+        /* ============================================================
+           ОСТАЛЬНЫЕ ЭКРАНЫ
+           ============================================================ */
+        #screen2 h1,
+        .album-title {
             animation: shimmerText 8s ease-in-out infinite;
         }
 
@@ -124,7 +367,7 @@
             box-shadow: 0 0 25px rgba(74, 26, 46, 0.5);
             overflow: hidden;
             background: rgba(255, 240, 245, 0.3);
-            transition: box-shadow 0.5s ease;
+            transition: box-shadow 0.5s ease, transform 0.5s ease;
         }
 
         .photo img {
@@ -133,7 +376,6 @@
             height: 100%;
             object-fit: cover;
             object-position: center;
-            transition: transform 0.5s ease;
         }
 
         .photo-1 {
@@ -170,6 +412,17 @@
 
         .photo:hover {
             box-shadow: 0 0 40px rgba(200, 140, 230, 0.8);
+            transform: scale(1.05);
+        }
+
+        .photo-1:hover {
+            animation-play-state: paused;
+            transform: scale(1.05);
+        }
+
+        .photo-2:hover {
+            animation-play-state: paused;
+            transform: scale(1.05) rotate(-3deg);
         }
 
         .buttons {
@@ -240,18 +493,9 @@
         }
 
         @keyframes brokenHeartFly {
-            0% {
-                opacity: 1;
-                transform: translate(0, 0) scale(0.3) rotate(0deg);
-            }
-            30% {
-                opacity: 1;
-                transform: translate(calc(var(--dx) * 0.4), calc(var(--dy) * 0.4 - 40px)) scale(1.3) rotate(var(--rot));
-            }
-            100% {
-                opacity: 0;
-                transform: translate(var(--dx), calc(var(--dy) + 100px)) scale(0.7) rotate(calc(var(--rot) * 2));
-            }
+            0% { opacity: 1; transform: translate(0, 0) scale(0.3) rotate(0deg); }
+            30% { opacity: 1; transform: translate(calc(var(--dx) * 0.4), calc(var(--dy) * 0.4 - 40px)) scale(1.3) rotate(var(--rot)); }
+            100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + 100px)) scale(0.7) rotate(calc(var(--rot) * 2)); }
         }
 
         #cosmosCanvas {
@@ -291,10 +535,7 @@
             animation: qMarkPulse 2s ease-in-out infinite;
         }
 
-        .question-mark-btn.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .question-mark-btn.show { opacity: 1; pointer-events: auto; }
 
         .question-mark-btn:hover {
             transform: scale(1.15);
@@ -303,29 +544,19 @@
         }
 
         @keyframes qMarkPulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 0 30px rgba(255, 158, 196, 0.5), inset 0 0 20px rgba(255, 158, 196, 0.2);
-            }
-            50% {
-                transform: scale(1.08);
-                box-shadow: 0 0 50px rgba(255, 158, 196, 0.9), 0 0 100px rgba(212, 160, 255, 0.6), inset 0 0 30px rgba(255, 158, 196, 0.4);
-            }
+            0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255, 158, 196, 0.5), inset 0 0 20px rgba(255, 158, 196, 0.2); }
+            50% { transform: scale(1.08); box-shadow: 0 0 50px rgba(255, 158, 196, 0.9), 0 0 100px rgba(212, 160, 255, 0.6), inset 0 0 30px rgba(255, 158, 196, 0.4); }
         }
 
         .final-heart {
             position: fixed;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
             font-size: 120px;
             color: #ff9ec4;
             cursor: pointer;
             z-index: 100;
-            text-shadow:
-                0 0 30px #ff9ec4,
-                0 0 60px #d4a0ff,
-                0 0 100px rgba(180, 100, 220, 0.8);
+            text-shadow: 0 0 30px #ff9ec4, 0 0 60px #d4a0ff, 0 0 100px rgba(180, 100, 220, 0.8);
             opacity: 0;
             transition: opacity 0.5s ease;
             display: none;
@@ -349,29 +580,167 @@
             50%      { transform: translate(-50%, -50%) scale(1.15); }
         }
 
-        .final-heart:hover {
-            color: #fff;
-        }
+        .final-heart:hover { color: #fff; }
 
-        .poll-question {
-            font-size: 1.8em;
-            margin-bottom: 35px;
-            line-height: 1.4;
-        }
-
-        .poll-options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .poll-btn {
+        /* ============================================================
+           АЛЬБОМ
+           ============================================================ */
+        .album-screen {
+            position: relative;
             width: 100%;
-            max-width: 320px;
-            padding: 15px 30px;
-            font-size: 1.1em;
+            min-height: 500px;
         }
+
+        .album-title {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            transition: opacity 0.4s ease;
+        }
+
+        .album-field {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .album-photo {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 12px;
+            border: 2px solid #4a1a2e;
+            box-shadow: 0 0 20px rgba(74, 26, 46, 0.5);
+            overflow: hidden;
+            cursor: pointer;
+            background: rgba(255, 240, 245, 0.3);
+            transition: box-shadow 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
+            animation: albumSway 8s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        .album-photo img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .album-photo:nth-child(1) { top: 5%;  left: 3%;   animation-duration: 8s;   animation-delay: 0s; }
+        .album-photo:nth-child(2) { top: 2%;  left: 38%;  animation-duration: 9s;   animation-delay: 1s; }
+        .album-photo:nth-child(3) { top: 8%;  left: 72%;  animation-duration: 7.5s; animation-delay: 0.5s; }
+        .album-photo:nth-child(4) { top: 38%; left: 18%;  animation-duration: 10s;  animation-delay: 2s; }
+        .album-photo:nth-child(5) { top: 42%; left: 55%;  animation-duration: 8.5s; animation-delay: 1.5s; }
+        .album-photo:nth-child(6) { top: 65%; left: 5%;   animation-duration: 9.5s; animation-delay: 0.8s; }
+        .album-photo:nth-child(7) { top: 68%; left: 42%;  animation-duration: 7s;   animation-delay: 2.2s; }
+
+        @keyframes albumSway {
+            0%, 100% { transform: translate(0, 0); }
+            25%      { transform: translate(-5px, -4px); }
+            50%      { transform: translate(4px, -6px); }
+            75%      { transform: translate(5px, 2px); }
+        }
+
+        .album-photo:hover {
+            box-shadow: 0 0 35px rgba(200, 140, 230, 0.9);
+            animation-play-state: paused;
+            transform: scale(1.08);
+            z-index: 10;
+        }
+
+        /* Раскрытое фото — выше затемнения, ничего его не затеняет */
+        .album-photo.expanded {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            margin-top: -260px;
+            margin-left: -150px;
+            z-index: 700;
+            animation: none !important;
+            transform: none !important;
+            cursor: default;
+            box-shadow: 0 0 60px rgba(255, 158, 196, 0.9), 0 0 120px rgba(212, 160, 255, 0.5);
+            transition: width 0.5s ease, height 0.5s ease, margin 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .album-photo.expanded:hover {
+            transform: none !important;
+        }
+
+        .album-photo.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.7);
+        }
+
+        .album-title.hidden { opacity: 0; pointer-events: none; }
+
+        .album-detail {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            width: 320px;
+            z-index: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            text-align: center;
+        }
+
+        .album-detail.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .album-text {
+            margin-top: 340px;
+            font-size: 1.2em;
+            line-height: 1.6;
+            padding: 0 10px;
+            animation: shimmerText 8s ease-in-out infinite;
+        }
+
+        .album-close {
+            margin-top: 25px;
+            padding: 10px 35px;
+            font-size: 1em;
+        }
+
+        .album-nav {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Затемнение убрано визуально (но overlay оставлен для клика на закрытие)
+           — теперь он с меньшей прозрачностью */
+        .album-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(26, 10, 46, 0.25);
+            z-index: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .album-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .poll-question { font-size: 1.8em; margin-bottom: 35px; line-height: 1.4; }
+        .poll-options { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .poll-btn { width: 100%; max-width: 320px; padding: 15px 30px; font-size: 1.1em; }
 
         .date-time-form {
             margin-top: 20px;
@@ -383,20 +752,8 @@
         }
         .date-time-form.show { display: flex; }
 
-        .select-row {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .select-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-
+        .select-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .select-box { display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .select-label {
             font-size: 0.95em;
             color: #4a1a2e;
@@ -467,14 +824,8 @@
         }
 
         .custom-select-options::-webkit-scrollbar { width: 8px; }
-        .custom-select-options::-webkit-scrollbar-track {
-            background: rgba(255, 240, 245, 0.5);
-            border-radius: 10px;
-        }
-        .custom-select-options::-webkit-scrollbar-thumb {
-            background: #4a1a2e;
-            border-radius: 10px;
-        }
+        .custom-select-options::-webkit-scrollbar-track { background: rgba(255, 240, 245, 0.5); border-radius: 10px; }
+        .custom-select-options::-webkit-scrollbar-thumb { background: #4a1a2e; border-radius: 10px; }
 
         .custom-select-option {
             padding: 12px 20px;
@@ -485,10 +836,7 @@
             text-align: center;
         }
         .custom-select-option:hover { background: rgba(200, 140, 230, 0.25); }
-        .custom-select-option.selected {
-            background: rgba(200, 140, 230, 0.4);
-            font-weight: bold;
-        }
+        .custom-select-option.selected { background: rgba(200, 140, 230, 0.4); font-weight: bold; }
 
         .confirm-result {
             margin-top: 30px;
@@ -505,11 +853,7 @@
         }
         .confirm-result.show { display: block; }
 
-        .confirm-result p {
-            font-size: 1.1em;
-            margin-bottom: 12px;
-            line-height: 1.6;
-        }
+        .confirm-result p { font-size: 1.1em; margin-bottom: 12px; line-height: 1.6; }
         .confirm-result .big {
             font-size: 1.5em;
             font-weight: bold;
@@ -517,16 +861,12 @@
             margin: 18px 0;
             text-shadow: 0 0 20px rgba(200, 140, 230, 0.6);
         }
-        .confirm-result .hint-text {
-            font-size: 0.95em;
-            opacity: 0.75;
-            font-style: italic;
-        }
+        .confirm-result .hint-text { font-size: 0.95em; opacity: 0.75; font-style: italic; }
 
-        #screen4 { display: none !important; }
+        #screen5 { }
     </style>
 </head>
-<body class="screen-1">
+<body class="screen-0">
 
     <div class="mountains" id="mountainsBg"></div>
 
@@ -536,9 +876,31 @@
 
     <div class="final-heart" id="finalHeart">♡</div>
 
+    <div class="album-overlay" id="albumOverlay" onclick="closeAlbumPhoto()"></div>
+
+    <audio id="bgMusic" src="muz.mp3" loop></audio>
+
     <div class="container">
 
-        <div class="screen active" id="screen1">
+        <!-- ЭКРАН 0 — КОНВЕРТ -->
+        <div class="screen active" id="screen0">
+            <div class="envelope-wrapper" id="envelopeWrapper" onclick="openEnvelope()">
+                <div class="envelope">
+                    <div class="envelope-back"></div>
+                    <div class="envelope-paper">
+                        <div class="envelope-paper-text">Для тебя 💜</div>
+                    </div>
+                    <div class="envelope-pocket"></div>
+                    <div class="envelope-bottom"></div>
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-heart">♥</div>
+                </div>
+                <div class="envelope-hint">Нажми, чтобы открыть</div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 1 -->
+        <div class="screen" id="screen1">
             <div class="photo photo-1">
                 <img src="g1.jpg" alt="Наше фото 1">
             </div>
@@ -551,6 +913,7 @@
             </div>
         </div>
 
+        <!-- ЭКРАН 2 -->
         <div class="screen" id="screen2">
             <h1>текст</h1>
             <div class="buttons">
@@ -559,9 +922,32 @@
             </div>
         </div>
 
+        <!-- ЭКРАН 3 — АЛЬБОМ -->
         <div class="screen" id="screen3">
+            <div class="album-screen">
+                <h2 class="album-title" id="albumTitle">Альбом</h2>
+
+                <div class="album-field" id="albumField">
+                    <div class="album-photo" onclick="openAlbumPhoto(this)"><img src="g3.jpg" alt="Фото 1"></div>
+                    <div class="album-photo" onclick="openAlbumPhoto(this)"><img src="g4.jpg" alt="Фото 2"></div>
+                    <div class="album-photo" onclick="openAlbumPhoto(this)"><img src="g5.jpg" alt="Фото 3"></div>
+                    <div class="album-photo" onclick="openAlbumPhoto(this)"><img src="g6.jpg" alt="Фото 4"></div>
+                    <div class="album-photo" onclick="openAlbumPhoto(this)"><img src="g7.jpg" alt="Фото 5"></div>
+                    <div class="album-photo" onclick="openAlbumPhoto(this)"><img src="g8.jpg" alt="Фото 6"></div>
+                    <div class="album-photo" onclick="openAlbumPhoto(this)"><img src="g9.jpg" alt="Фото 7"></div>
+                </div>
+
+                <div class="album-nav" id="albumNav">
+                    <button onclick="prevScreen(2)">← Назад</button>
+                    <button onclick="nextScreen(4)">Дальше →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 4 — ВОПРОС -->
+        <div class="screen" id="screen4">
             <p class="question">
-                <span class="yes-link" id="yesLink" onclick="nextScreen(4)">Да</span> или нет?
+                <span class="yes-link" id="yesLink" onclick="nextScreen(5)">Да</span> или нет?
             </p>
             <div class="question-buttons" id="questionButtons">
                 <button class="yes-btn" id="yesBtn" onclick="escapeYes(event, this)">Да</button>
@@ -569,9 +955,11 @@
             </div>
         </div>
 
-        <div class="screen" id="screen4"></div>
+        <!-- ЭКРАН 5 — КОСМОС -->
+        <div class="screen" id="screen5"></div>
 
-        <div class="screen" id="screen5">
+        <!-- ЭКРАН 6 — ОПРОС -->
+        <div class="screen" id="screen6">
             <p class="poll-question">Что мы будем делать? 💫</p>
 
             <div class="poll-options" id="pollOptions">
@@ -630,20 +1018,23 @@
     <script src="three.min.js"></script>
 
     <script>
-        // ================================================================
-        //  URL ТВОЕГО СЕРВЕРА НА AMVERA
-        // ================================================================
         const BOT_URL = "https://love-bot-malinjem3.msk1.amvera.tech/send";
 
         const yesLink = document.getElementById('yesLink');
         const cosmosCanvas = document.getElementById('cosmosCanvas');
         const finalHeart = document.getElementById('finalHeart');
         const questionMarkBtn = document.getElementById('questionMarkBtn');
+        const albumOverlay = document.getElementById('albumOverlay');
+        const albumTitle = document.getElementById('albumTitle');
+        const albumNav = document.getElementById('albumNav');
+        const bgMusic = document.getElementById('bgMusic');
+        const envelopeWrapper = document.getElementById('envelopeWrapper');
 
         let yesClickCount = 0;
         let chosenActivity = '';
         let nameBtnClicked = false;
         let questionMarkTimer = null;
+        let musicStarted = false;
 
         const selections = { day: '', month: '', hour: '', minute: '' };
 
@@ -701,6 +1092,22 @@
             'Bem-vindo', 'Velkommen', 'Välkommen', 'Welkom'
         ];
 
+        function openEnvelope() {
+            if (envelopeWrapper.classList.contains('opening')) return;
+            envelopeWrapper.classList.add('opening');
+
+            bgMusic.volume = 0.4;
+            bgMusic.play().then(() => {
+                musicStarted = true;
+            }).catch(err => {
+                console.log("Музыка не запустилась:", err);
+            });
+
+            setTimeout(() => {
+                nextScreen(1);
+            }, 1800);
+        }
+
         let threeScene, camera, renderer, wordGroup, starField, animationId;
         let twinkleStars = [];
         let targetRotX = 0, targetRotY = 0;
@@ -721,6 +1128,57 @@
         let nameFlashStartTime = 0;
         let nameFlashing = false;
 
+        let currentExpandedPhoto = null;
+
+        function openAlbumPhoto(photoEl) {
+            if (currentExpandedPhoto) return;
+
+            const allPhotos = document.querySelectorAll('.album-photo');
+            allPhotos.forEach(p => {
+                if (p !== photoEl) p.classList.add('hidden');
+            });
+
+            photoEl.classList.add('expanded');
+            currentExpandedPhoto = photoEl;
+
+            albumOverlay.classList.add('show');
+            albumTitle.classList.add('hidden');
+            albumNav.style.opacity = '0';
+            albumNav.style.pointerEvents = 'none';
+
+            const detail = document.createElement('div');
+            detail.className = 'album-detail';
+            detail.id = 'albumDetail';
+            detail.innerHTML = `
+                <div class="album-text">текст</div>
+                <button class="album-close" onclick="closeAlbumPhoto()">Закрыть</button>
+            `;
+            document.body.appendChild(detail);
+
+            requestAnimationFrame(() => {
+                detail.classList.add('show');
+            });
+        }
+
+        function closeAlbumPhoto() {
+            if (!currentExpandedPhoto) return;
+
+            const detail = document.getElementById('albumDetail');
+            if (detail) detail.remove();
+
+            currentExpandedPhoto.classList.remove('expanded');
+            currentExpandedPhoto = null;
+
+            document.querySelectorAll('.album-photo').forEach(p => {
+                p.classList.remove('hidden');
+            });
+
+            albumOverlay.classList.remove('show');
+            albumTitle.classList.remove('hidden');
+            albumNav.style.opacity = '';
+            albumNav.style.pointerEvents = '';
+        }
+
         function initCosmos() {
             if (threeScene) {
                 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -731,19 +1189,10 @@
 
             threeScene = new THREE.Scene();
 
-            camera = new THREE.PerspectiveCamera(
-                70,
-                window.innerWidth / window.innerHeight,
-                1,
-                5000
-            );
+            camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 5000);
             camera.position.z = cameraDistance;
 
-            renderer = new THREE.WebGLRenderer({
-                canvas: cosmosCanvas,
-                antialias: true,
-                alpha: true
-            });
+            renderer = new THREE.WebGLRenderer({ canvas: cosmosCanvas, antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.setClearColor(0x000000, 0);
@@ -797,25 +1246,15 @@
             texture.minFilter = THREE.LinearFilter;
 
             const material = new THREE.SpriteMaterial({
-                map: texture,
-                transparent: true,
-                depthTest: false,
-                depthWrite: false,
-                opacity: 0.95
+                map: texture, transparent: true, depthTest: false, depthWrite: false, opacity: 0.95
             });
 
             nameSprite = new THREE.Sprite(material);
 
             const size = 30;
             const scale = size / 10;
-            nameSprite.scale.set(
-                (canvas.width / canvas.height) * scale,
-                scale,
-                1
-            );
-
+            nameSprite.scale.set((canvas.width / canvas.height) * scale, scale, 1);
             nameSprite.position.set(0, 0, 0);
-
             nameSprite.userData = {
                 isName: true,
                 baseScaleX: (canvas.width / canvas.height) * scale,
@@ -849,10 +1288,7 @@
                 const angle = (Math.PI * 2 * i) / 8;
                 ctx.beginPath();
                 ctx.moveTo(size/2, size/2);
-                ctx.lineTo(
-                    size/2 + Math.cos(angle) * 200,
-                    size/2 + Math.sin(angle) * 200
-                );
+                ctx.lineTo(size/2 + Math.cos(angle) * 200, size/2 + Math.sin(angle) * 200);
                 ctx.stroke();
             }
 
@@ -860,12 +1296,8 @@
             texture.minFilter = THREE.LinearFilter;
 
             const material = new THREE.SpriteMaterial({
-                map: texture,
-                transparent: true,
-                blending: THREE.AdditiveBlending,
-                depthTest: false,
-                depthWrite: false,
-                opacity: 0
+                map: texture, transparent: true, blending: THREE.AdditiveBlending,
+                depthTest: false, depthWrite: false, opacity: 0
             });
 
             nameFlashSprite = new THREE.Sprite(material);
@@ -938,20 +1370,12 @@
             texture.minFilter = THREE.LinearFilter;
 
             const material = new THREE.SpriteMaterial({
-                map: texture,
-                transparent: true,
-                depthTest: false,
-                depthWrite: false,
-                opacity: 0.9
+                map: texture, transparent: true, depthTest: false, depthWrite: false, opacity: 0.9
             });
 
             const sprite = new THREE.Sprite(material);
             const scale = size / 10;
-            sprite.scale.set(
-                (canvas.width / canvas.height) * scale,
-                scale,
-                1
-            );
+            sprite.scale.set((canvas.width / canvas.height) * scale, scale, 1);
 
             return sprite;
         }
@@ -970,11 +1394,7 @@
             starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
             const starMaterial = new THREE.PointsMaterial({
-                color: 0xffd4e5,
-                size: 1.8,
-                transparent: true,
-                opacity: 0.7,
-                sizeAttenuation: true
+                color: 0xffd4e5, size: 1.8, transparent: true, opacity: 0.7, sizeAttenuation: true
             });
 
             starField = new THREE.Points(starGeometry, starMaterial);
@@ -985,9 +1405,7 @@
             for (let i = 0; i < 100; i++) {
                 const starGeo = new THREE.SphereGeometry(1.2, 4, 4);
                 const starMat = new THREE.MeshBasicMaterial({
-                    color: 0xffffff,
-                    transparent: true,
-                    opacity: 0.3 + Math.random() * 0.6
+                    color: 0xffffff, transparent: true, opacity: 0.3 + Math.random() * 0.6
                 });
                 const star = new THREE.Mesh(starGeo, starMat);
                 star.position.set(
@@ -1011,10 +1429,8 @@
 
             el.addEventListener('mousedown', (e) => {
                 isDragging = true;
-                lastX = e.clientX;
-                lastY = e.clientY;
-                mouseDownX = e.clientX;
-                mouseDownY = e.clientY;
+                lastX = e.clientX; lastY = e.clientY;
+                mouseDownX = e.clientX; mouseDownY = e.clientY;
                 autoRotate = false;
             });
 
@@ -1022,8 +1438,7 @@
                 if (!isDragging) return;
                 const dx = e.clientX - lastX;
                 const dy = e.clientY - lastY;
-                lastX = e.clientX;
-                lastY = e.clientY;
+                lastX = e.clientX; lastY = e.clientY;
                 targetRotY += dx * 0.005;
                 targetRotX += dy * 0.005;
             });
@@ -1048,15 +1463,11 @@
                     const dy = e.clientY - screenY;
                     const distToName = Math.sqrt(dx * dx + dy * dy);
 
-                    if (distToName < clickRadius) {
-                        triggerExplosion();
-                    }
+                    if (distToName < clickRadius) triggerExplosion();
                 }
 
                 isDragging = false;
-                setTimeout(() => {
-                    if (!isDragging) autoRotate = true;
-                }, 3000);
+                setTimeout(() => { if (!isDragging) autoRotate = true; }, 3000);
             });
 
             el.addEventListener('wheel', (e) => {
@@ -1125,15 +1536,10 @@
                         const dy = t.clientY - screenY;
                         const distToName = Math.sqrt(dx * dx + dy * dy);
 
-                        if (distToName < clickRadius) {
-                            triggerExplosion();
-                        }
+                        if (distToName < clickRadius) triggerExplosion();
                     }
                 }
-
-                setTimeout(() => {
-                    if (!isDragging) autoRotate = true;
-                }, 3000);
+                setTimeout(() => { if (!isDragging) autoRotate = true; }, 3000);
             });
         }
 
@@ -1143,10 +1549,7 @@
             explosionStartTime = Date.now();
             exploded = true;
 
-            if (questionMarkTimer) {
-                clearTimeout(questionMarkTimer);
-                questionMarkTimer = null;
-            }
+            if (questionMarkTimer) { clearTimeout(questionMarkTimer); questionMarkTimer = null; }
             questionMarkBtn.classList.remove('show');
 
             cameraDistance = INITIAL_CAMERA_DISTANCE;
@@ -1154,9 +1557,7 @@
 
             createNameFlash();
 
-            setTimeout(() => {
-                finalHeart.classList.add('show');
-            }, 7200);
+            setTimeout(() => { finalHeart.classList.add('show'); }, 7200);
         }
 
         function animateCosmos() {
@@ -1164,7 +1565,6 @@
 
             if (exploding) {
                 const elapsed = (Date.now() - explosionStartTime) / 1000;
-
                 camera.position.z += (INITIAL_CAMERA_DISTANCE - camera.position.z) * 0.06;
 
                 if (elapsed < 2) {
@@ -1182,14 +1582,11 @@
                             if (!nameFlashing) {
                                 nameFlashing = true;
                                 nameFlashStartTime = Date.now();
-                                if (nameFlashSprite) {
-                                    nameFlashSprite.material.opacity = 1;
-                                }
+                                if (nameFlashSprite) nameFlashSprite.material.opacity = 1;
                             }
                             sprite.material.opacity = 0;
                             return;
                         }
-
                         if (sprite.userData && sprite.userData.explodeDir) {
                             const dir = sprite.userData.explodeDir;
                             sprite.position.x += dir.x * speed;
@@ -1221,17 +1618,12 @@
                     }
                 }
             } else {
-                if (autoRotate) {
-                    targetRotY += 0.0015;
-                }
-
+                if (autoRotate) targetRotY += 0.0015;
                 wordGroup.rotation.y += (targetRotY - wordGroup.rotation.y) * 0.06;
                 wordGroup.rotation.x += (targetRotX - wordGroup.rotation.x) * 0.06;
-
                 camera.position.z += (cameraDistance - camera.position.z) * 0.06;
 
                 const t = Date.now() * 0.001;
-
                 wordGroup.children.forEach((sprite) => {
                     if (sprite.userData && sprite.userData.isName) {
                         const pulse = 0.85 + 0.15 * Math.sin(t * 1.5);
@@ -1244,7 +1636,6 @@
                         );
                         return;
                     }
-
                     if (sprite.userData && sprite.userData.basePos) {
                         const { basePos, speed, offset } = sprite.userData;
                         sprite.position.x = basePos.x + Math.sin(t * speed + offset) * 4;
@@ -1267,27 +1658,19 @@
             renderer.render(threeScene, camera);
         }
 
-        questionMarkBtn.addEventListener('click', () => {
-            nextScreen(5);
-        });
-
-        finalHeart.addEventListener('click', () => {
-            nextScreen(5);
-        });
+        questionMarkBtn.addEventListener('click', () => { nextScreen(6); });
+        finalHeart.addEventListener('click', () => { nextScreen(6); });
 
         function updateBackground(num) {
-            document.body.classList.remove('screen-1', 'screen-2', 'screen-3', 'screen-4', 'screen-5');
+            document.body.classList.remove('screen-0', 'screen-1', 'screen-2', 'screen-3', 'screen-4', 'screen-5', 'screen-6');
             document.body.classList.add('screen-' + num);
 
             const mountainsBg = document.getElementById('mountainsBg');
 
-            if (questionMarkTimer) {
-                clearTimeout(questionMarkTimer);
-                questionMarkTimer = null;
-            }
+            if (questionMarkTimer) { clearTimeout(questionMarkTimer); questionMarkTimer = null; }
             questionMarkBtn.classList.remove('show');
 
-            if (num === 4) {
+            if (num === 5) {
                 cosmosCanvas.classList.add('active');
                 mountainsBg.style.display = 'none';
                 document.body.style.background = 'none';
@@ -1295,9 +1678,8 @@
 
                 setTimeout(() => {
                     initCosmos();
-
                     questionMarkTimer = setTimeout(() => {
-                        if (!nameBtnClicked && document.getElementById('screen4').classList.contains('active')) {
+                        if (!nameBtnClicked && document.getElementById('screen5').classList.contains('active')) {
                             questionMarkBtn.classList.add('show');
                         }
                     }, 40000);
@@ -1307,7 +1689,6 @@
                 mountainsBg.style.display = 'block';
                 document.body.style.background =
                     "linear-gradient(rgba(255, 240, 245, 0.15), rgba(255, 224, 232, 0.2)), url('fon1.jpg') center/cover no-repeat fixed";
-
                 finalHeart.classList.remove('show');
             }
         }
@@ -1316,6 +1697,10 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('screen' + num).classList.add('active');
             updateBackground(num);
+
+            if (num !== 3 && currentExpandedPhoto) {
+                closeAlbumPhoto();
+            }
 
             const yesBtn = document.getElementById('yesBtn');
             if (yesBtn) {
@@ -1326,7 +1711,7 @@
                 yesBtn.style.margin = '';
             }
 
-            if (num !== 3) {
+            if (num !== 4) {
                 yesLink.classList.remove('highlight');
                 yesClickCount = 0;
             }
@@ -1359,7 +1744,6 @@
                 heart.style.animationDelay = (Math.random() * 0.15) + 's';
 
                 document.body.appendChild(heart);
-
                 setTimeout(() => heart.remove(), 2000);
             }
         }
@@ -1389,9 +1773,7 @@
             });
 
             yesClickCount++;
-            if (yesClickCount >= 4) {
-                yesLink.classList.add('highlight');
-            }
+            if (yesClickCount >= 4) yesLink.classList.add('highlight');
         }
 
         function chooseActivity(activity) {
@@ -1459,18 +1841,11 @@
             });
         }
 
-        // ================================================================
-        //  ОТПРАВКА ДАННЫХ В TELEGRAM (на сервер Amvera)
-        // ================================================================
         function sendToBot(activity, dateStr, timeStr) {
             fetch(BOT_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    activity: activity,
-                    date: dateStr,
-                    time: timeStr
-                })
+                body: JSON.stringify({ activity: activity, date: dateStr, time: timeStr })
             })
             .then(r => r.json())
             .then(data => console.log("Отправлено в тг:", data))
@@ -1491,7 +1866,6 @@
             const dateStr = day + ' ' + monthName;
             const timeStr = hour + ':' + minute;
 
-            // Отправляем в Telegram
             sendToBot(chosenActivity, dateStr, timeStr);
 
             document.getElementById('dateTimeForm').classList.remove('show');
@@ -1513,6 +1887,8 @@
             petal.style.fontSize = (Math.random() * 15 + 15) + 'px';
             document.body.appendChild(petal);
         }
+
+        updateBackground(0);
     </script>
 
 </body>
