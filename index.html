@@ -630,6 +630,11 @@
     <script src="three.min.js"></script>
 
     <script>
+        // ================================================================
+        //  URL ТВОЕГО СЕРВЕРА НА AMVERA
+        // ================================================================
+        const BOT_URL = "https://love-bot-malinjem3.msk1.amvera.tech/send";
+
         const yesLink = document.getElementById('yesLink');
         const cosmosCanvas = document.getElementById('cosmosCanvas');
         const finalHeart = document.getElementById('finalHeart');
@@ -704,7 +709,6 @@
         let lastX = 0, lastY = 0;
         let cameraDistance = 400;
 
-        // Начальные значения для возврата камеры
         const INITIAL_CAMERA_DISTANCE = 400;
         const INITIAL_ROT_X = 0;
 
@@ -713,8 +717,6 @@
         let exploded = false;
 
         let nameSprite = null;
-
-        // ===== Вспышка "имени" при взрыве =====
         let nameFlashSprite = null;
         let nameFlashStartTime = 0;
         let nameFlashing = false;
@@ -823,7 +825,6 @@
             wordGroup.add(nameSprite);
         }
 
-        // ===== СОЗДАЁМ СПРАЙТ-ВСПЫШКУ для "имени" =====
         function createNameFlash() {
             if (nameFlashSprite) return;
 
@@ -833,7 +834,6 @@
             canvas.height = size;
             const ctx = canvas.getContext('2d');
 
-            // Яркое радиальное свечение — белое ядро + розовое гало
             const gradient = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
             gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
             gradient.addColorStop(0.1, 'rgba(255, 240, 250, 0.95)');
@@ -843,7 +843,6 @@
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, size, size);
 
-            // Лучики-звёздочка
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
             ctx.lineWidth = 3;
             for (let i = 0; i < 8; i++) {
@@ -1150,12 +1149,9 @@
             }
             questionMarkBtn.classList.remove('show');
 
-            // ===== ВОЗВРАТ КАМЕРЫ В ПЕРВОНАЧАЛЬНЫЙ ВИД =====
-            // Плавно меняем cameraDistance и targetRotX — они анимируются в animateCosmos
             cameraDistance = INITIAL_CAMERA_DISTANCE;
             targetRotX = INITIAL_ROT_X;
 
-            // Создаём спрайт-вспышку для "имени"
             createNameFlash();
 
             setTimeout(() => {
@@ -1169,37 +1165,27 @@
             if (exploding) {
                 const elapsed = (Date.now() - explosionStartTime) / 1000;
 
-                // ===== ПЛАВНЫЙ ВОЗВРАТ КАМЕРЫ =====
-                // Камера плавно отъезжает на начальную дистанцию
                 camera.position.z += (INITIAL_CAMERA_DISTANCE - camera.position.z) * 0.06;
 
-                // ===== ФАЗА 1: 0–2 сек — ускоряющееся вращение =====
                 if (elapsed < 2) {
                     const spinSpeed = 0.02 + (elapsed / 2) * 0.13;
                     wordGroup.rotation.y += spinSpeed;
                     targetRotY += 0.0015;
                     wordGroup.rotation.x += (targetRotX - wordGroup.rotation.x) * 0.06;
-                }
-                // ===== ФАЗА 2: 2–4 сек — быстрое вращение =====
-                else if (elapsed < 4) {
+                } else if (elapsed < 4) {
                     wordGroup.rotation.y += 0.18;
                     wordGroup.rotation.x += 0.05 * Math.sin(elapsed * 8);
-                }
-                // ===== ФАЗА 3: 4–7 сек — РАЗЛЁТ =====
-                else if (elapsed < 7) {
+                } else if (elapsed < 7) {
                     const speed = 5;
                     wordGroup.children.forEach((sprite) => {
-                        // "имя" взрывается как звёздочка в самом начале разлёта
                         if (sprite.userData && sprite.userData.isName) {
                             if (!nameFlashing) {
                                 nameFlashing = true;
                                 nameFlashStartTime = Date.now();
-
                                 if (nameFlashSprite) {
                                     nameFlashSprite.material.opacity = 1;
                                 }
                             }
-                            // Прячем "имя"
                             sprite.material.opacity = 0;
                             return;
                         }
@@ -1216,22 +1202,18 @@
                         if (sprite.userData && sprite.userData.isName) return;
                         sprite.material.opacity = Math.max(0, 0.9 - fadeProgress * 0.9);
                     });
-                }
-                // ===== КОНЕЦ =====
-                else {
+                } else {
                     wordGroup.children.forEach((sprite) => {
                         if (sprite.userData && sprite.userData.isName) return;
                         sprite.material.opacity = 0;
                     });
                 }
 
-                // ===== АНИМАЦИЯ ВСПЫШКИ "ИМЕНИ" =====
                 if (nameFlashing && nameFlashSprite) {
                     const flashElapsed = (Date.now() - nameFlashStartTime) / 1000;
                     if (flashElapsed < 1.5) {
-                        // Резко расширяется + плавно исчезает
                         const progress = flashElapsed / 1.5;
-                        const scale = 30 + progress * 200; // от 30 до 230
+                        const scale = 30 + progress * 200;
                         nameFlashSprite.scale.set(scale, scale, 1);
                         nameFlashSprite.material.opacity = Math.max(0, 1 - progress);
                     } else {
@@ -1477,6 +1459,24 @@
             });
         }
 
+        // ================================================================
+        //  ОТПРАВКА ДАННЫХ В TELEGRAM (на сервер Amvera)
+        // ================================================================
+        function sendToBot(activity, dateStr, timeStr) {
+            fetch(BOT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    activity: activity,
+                    date: dateStr,
+                    time: timeStr
+                })
+            })
+            .then(r => r.json())
+            .then(data => console.log("Отправлено в тг:", data))
+            .catch(err => console.error("Ошибка отправки:", err));
+        }
+
         function confirmChoice() {
             if (!selections.day || !selections.month || !selections.hour || !selections.minute) {
                 alert('Пожалуйста, выбери день, месяц, час и минуты 💜');
@@ -1488,9 +1488,15 @@
             const hour = selections.hour;
             const minute = selections.minute;
 
+            const dateStr = day + ' ' + monthName;
+            const timeStr = hour + ':' + minute;
+
+            // Отправляем в Telegram
+            sendToBot(chosenActivity, dateStr, timeStr);
+
             document.getElementById('dateTimeForm').classList.remove('show');
             document.getElementById('resultText').textContent =
-                chosenActivity + ', ' + day + ' ' + monthName + ' в ' + hour + ':' + minute;
+                chosenActivity + ', ' + dateStr + ' в ' + timeStr;
             document.getElementById('confirmResult').classList.add('show');
         }
 
